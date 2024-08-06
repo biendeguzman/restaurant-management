@@ -10,5 +10,14 @@ Prerequisites
     Intellij IDEA Community Edition 2023 or any JAVA IDE.
     
 Clone the repository
-[link](https://github.com/biendeguzman/restaurant-management.git)
-cd restaurant-management
+1. git clone [link](https://github.com/biendeguzman/restaurant-management.git)
+2. cd restaurant-management
+
+### Configure the Database 
+Update the application.properties file located in src/main/resources with your database configuration:
+
+    spring.datasource.url=jdbc:mysql://localhost:3306/restaurant_db
+    spring.datasource.username=root
+    spring.datasource.password=yourpassword
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.show-sql=true
