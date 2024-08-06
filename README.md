@@ -8,3 +8,7 @@ Prerequisites
     MySQL or any other preferred database
     Java Development Kit(JDK) or higher version.
     Intellij IDEA Community Edition 2023 or any JAVA IDE.
+    
+Clone the repository
+[link](https://github.com/biendeguzman/restaurant-management.git)
+cd restaurant-management
