@@ -18,7 +18,7 @@ public class Customer {
 
     private String name;
     private String address;
-    private String contact_number;
+    private String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)

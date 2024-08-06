@@ -1,18 +1,18 @@
 package com.example.restaurant_management.controller;
 
+import com.example.restaurant_management.model.Customer;
 import com.example.restaurant_management.model.Employee;
 import com.example.restaurant_management.model.Menu;
 import com.example.restaurant_management.model.Restaurant;
+import com.example.restaurant_management.repository.CustomerRepo;
 import com.example.restaurant_management.repository.EmployeeRepo;
 import com.example.restaurant_management.repository.MenuRepo;
 import com.example.restaurant_management.repository.RestaurantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,12 +21,12 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantRepo restaurantRepo;
-
     @Autowired
     private MenuRepo menuRepo;
-
     @Autowired
     private EmployeeRepo employeeRepo;
+    @Autowired
+    private CustomerRepo customerRepo;
 
     @GetMapping
     public Iterable<Restaurant> findAll() {
@@ -36,7 +36,6 @@ public class RestaurantController {
     public Restaurant getRestaurantById(@PathVariable Long id) {
         return restaurantRepo.findById(id).orElse(null);
     }
-
     @PostMapping
     @Transactional
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
@@ -55,6 +54,13 @@ public class RestaurantController {
             for (Employee employee : employees) {
                 employee.setRestaurant(savedRestaurant);
                 employeeRepo.save(employee);
+            }
+        }
+        List<Customer> customers = restaurant.getCustomer();
+        if (customers != null) {
+            for (Customer customer : customers) {
+                customer.setRestaurant(savedRestaurant);
+                customerRepo.save(customer);
             }
         }
         return ResponseEntity.ok(savedRestaurant);
