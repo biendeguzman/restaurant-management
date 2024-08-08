@@ -14,6 +14,9 @@ public class CustomerController {
     @Autowired
     private CustomerRepo customerRepo;
 
+//    @Autowired
+//    private OrderRepo orderRepo;
+
     @GetMapping
     public ResponseEntity<Iterable<Customer>> findAll() {
         Iterable<Customer> customers = customerRepo.findAll();
@@ -21,7 +24,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomereById(@PathVariable Long id) {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
         return customerRepo.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -29,7 +32,18 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+
         Customer savedCustomer = customerRepo.save(customer);
+
+//        List<Order> orders = customer.getOrder();
+//        List<Order> savedOrders = new ArrayList<>();
+//        for (Order order : orders) {
+//            order.setTotalAmount(order.getTotalAmount());
+//            order.setPrice(order.getPrice());
+//            order.setCustomer(savedCustomer);
+//            Order savedOrder = orderRepo.save(order);
+//            savedOrders.add(savedOrder);
+//        }
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
     }
 

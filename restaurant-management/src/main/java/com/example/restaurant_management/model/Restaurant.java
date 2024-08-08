@@ -39,6 +39,14 @@ public class Restaurant {
     @JsonManagedReference
     private List<Customer> customer = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "restaurant_supplier",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
+    private List<Supplier> suppliers;
+
     public void setEmployee(List<Employee> savedEmployees) {
         this.employee.clear();
         this.employee.addAll(savedEmployees);
@@ -53,4 +61,10 @@ public class Restaurant {
         this.customer.clear();
         this.customer.addAll(savedCustomers);
     }
+
+    public void setSupplier(List<Supplier> savedSuppliers) {
+        this.suppliers.clear();
+        this.suppliers.addAll(savedSuppliers);
+    }
+
 }

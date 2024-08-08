@@ -1,18 +1,14 @@
 package com.example.restaurant_management.controller;
 
-import com.example.restaurant_management.model.Customer;
-import com.example.restaurant_management.model.Employee;
-import com.example.restaurant_management.model.Menu;
-import com.example.restaurant_management.model.Restaurant;
-import com.example.restaurant_management.repository.CustomerRepo;
-import com.example.restaurant_management.repository.EmployeeRepo;
-import com.example.restaurant_management.repository.MenuRepo;
-import com.example.restaurant_management.repository.RestaurantRepo;
+import com.example.restaurant_management.model.*;
+import com.example.restaurant_management.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,9 +23,11 @@ public class RestaurantController {
     private EmployeeRepo employeeRepo;
     @Autowired
     private CustomerRepo customerRepo;
+    @Autowired
+    private SupplierRepo supplierRepo;
 
     @GetMapping
-    public Iterable<Restaurant> findAll() {
+    public List<Restaurant> findAll() {
         return restaurantRepo.findAll();
     }
     @GetMapping("/{id}")
@@ -43,27 +41,51 @@ public class RestaurantController {
         Restaurant savedRestaurant = restaurantRepo.save(restaurant);
 
         List<Menu> menus = restaurant.getMenu();
-        if (menus != null) {
-            for (Menu menu : menus) {
-                menu.setRestaurant(savedRestaurant);
-                menuRepo.save(menu);
-            }
+        List<Menu> savedMenus = new ArrayList<>();
+        for (Menu menu : menus) {
+            menu.setName(menu.getName());
+            menu.setCategory(menu.getCategory());
+            menu.setPrice(menu.getPrice());
+            menu.setRestaurant(savedRestaurant);
+            Menu savedMenu = menuRepo.save(menu);
+            savedMenus.add(savedMenu);
         }
+
         List<Employee> employees = restaurant.getEmployee();
-        if (employees != null) {
-            for (Employee employee : employees) {
-                employee.setRestaurant(savedRestaurant);
-                employeeRepo.save(employee);
-            }
+        List<Employee> savedEmployees = new ArrayList<>();
+        for (Employee employee : employees) {
+            employee.setName(employee.getName());
+            employee.setRole(employee.getRole());
+            employee.setEmail(employee.getEmail());
+            employee.setRestaurant(savedRestaurant);
+            Employee savedEmployee = employeeRepo.save(employee);
+            savedEmployees.add(savedEmployee);
         }
+
         List<Customer> customers = restaurant.getCustomer();
-        if (customers != null) {
-            for (Customer customer : customers) {
-                customer.setRestaurant(savedRestaurant);
-                customerRepo.save(customer);
-            }
+        List<Customer> savedCustomers = new ArrayList<>();
+        for (Customer customer : customers) {
+            customer.setName(customer.getName());
+            customer.setAddress(customer.getAddress());
+            customer.setPhoneNumber(customer.getPhoneNumber());
+            customer.setRestaurant(savedRestaurant);
+            Customer savedCustomer = customerRepo.save(customer);
+            savedCustomers.add(savedCustomer);
         }
-        return ResponseEntity.ok(savedRestaurant);
+
+        List<Supplier> suppliers = restaurant.getSuppliers();
+        List<Supplier> savedSuppliers = new ArrayList<>();
+        for (Supplier supplier : suppliers) {
+            Supplier savedSupplier = supplierRepo.findByName(supplier.getName())
+                    .orElseGet(() -> supplierRepo.save(supplier));
+            savedSuppliers.add(savedSupplier);
+        }
+
+        savedRestaurant.setSuppliers(savedSuppliers);
+
+        restaurantRepo.save(savedRestaurant);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRestaurant);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable("id") Long id) {
