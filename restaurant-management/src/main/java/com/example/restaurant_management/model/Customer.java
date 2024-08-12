@@ -1,14 +1,10 @@
 package com.example.restaurant_management.model;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,14 +21,14 @@ public class Customer {
     private String phoneNumber;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonBackReference
     private Restaurant restaurant;
 
 //    @OneToMany(mappedBy = "customer")
 //    @JsonManagedReference
-//    private List<Order> order = new ArrayList<>();
-
+//    private List<Order> order;
+//
 //    public void setOrder(List<Order> savedOrder) {
 //        this.order.clear();
 //        this.order.addAll(savedOrder);

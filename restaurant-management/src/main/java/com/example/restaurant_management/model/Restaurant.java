@@ -1,5 +1,6 @@
 package com.example.restaurant_management.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,15 +29,12 @@ public class Restaurant {
     private Owner owner;
 
     @OneToMany(mappedBy = "restaurant")
-    @JsonManagedReference
     private List<Menu> menu = new ArrayList<>();
 
     @OneToMany(mappedBy = "restaurant")
-    @JsonManagedReference
     private List<Employee> employee = new ArrayList<>();
 
     @OneToMany(mappedBy = "restaurant")
-    @JsonManagedReference
     private List<Customer> customer = new ArrayList<>();
 
     @ManyToMany
