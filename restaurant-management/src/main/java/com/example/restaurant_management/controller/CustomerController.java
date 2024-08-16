@@ -1,16 +1,13 @@
 package com.example.restaurant_management.controller;
 
 import com.example.restaurant_management.model.Customer;
-import com.example.restaurant_management.model.Order;
+//import com.example.restaurant_management.model.Order;
 import com.example.restaurant_management.repository.CustomerRepo;
-import com.example.restaurant_management.repository.OrderRepo;
+//import com.example.restaurant_management.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/customer")
